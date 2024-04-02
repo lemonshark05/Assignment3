@@ -1,0 +1,4 @@
+x <= z
+y <= x
+ref(A) <= x
+ref(B) <= y

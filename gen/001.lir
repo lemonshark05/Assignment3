@@ -1,0 +1,22 @@
+foo: &(&int,int,&int)->&int
+
+fn foo(p1:&int, p2:int, p3:&int) -> &int {
+let r:&int
+entry:
+    r = $copy p3
+    $ret r
+}
+fn main() -> int {
+let a:&int, b:&int, c:&int, d:&&int, e:&int, f:&(&int,int,&int)->&int, g:int
+entry:
+    a = $alloc 1 [_alloc1]
+    b = $alloc 1 [_alloc2]
+    f = $copy foo
+    c = $call_idr f(a, 42, b) then exit
+exit:
+    d = $alloc 1 [_alloc3]
+    $store d a
+    e = $load d
+    g = $load e
+    $ret g
+}

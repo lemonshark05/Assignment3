@@ -1,25 +1,27 @@
 #!/bin/bash
 
-TEST_DIR="./simple"
+#TEST_DIR="./solve"
+TEST_DIR="./gen"
 OUTPUT_DIR="my-results"
 
 mkdir -p "$OUTPUT_DIR"
 
 # Loop through each .lir file in the directory
 for file in "$TEST_DIR"/*.lir; do
+#    filename=$(basename "${file%.lir.constraints}")
     filename=$(basename "${file%.lir}")
     output_dir="$OUTPUT_DIR/$filename"
 
     mkdir -p "$output_dir"
 
     json_file="$output_dir/${filename}.lir.json"
-#    stats_file="${file%.lir}.dominance.soln"
-    stats_file="${file%.lir}.constraints"
+    stats_file="${file%.lir}.lir.constraints"
+#    stats_file="${file%.lir}.solution"
     output_stats="$output_dir/my-$filename"
     diff_output="$output_dir/diff.txt"
 
-    ./run-solver.sh "$file" "$json_file" "main"> "$output_stats"
-#    ./run-generator.sh "$file" "$json_file" "main"> "$output_stats"
+#    ./run-solver.sh "$file" "$json_file" "main"> "$output_stats"
+    ./run-generator.sh "$file" "$json_file" "main"> "$output_stats"
     diff -wpB "$output_stats" "$stats_file" > "$diff_output"
 
     if [ -s "$diff_output" ]; then

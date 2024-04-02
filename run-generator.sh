@@ -9,5 +9,5 @@ LIR_FILE="$1"
 JSON_FILE="$2"
 FUNCTION_NAME="$3"
 
-javac ConstraintGenerator.java State.java ProgramPoint.java VariableState.java
+javac ConstraintGenerator.java Function.java VariableState.java
 java ConstraintGenerator "$LIR_FILE" "$JSON_FILE" "$FUNCTION_NAME"

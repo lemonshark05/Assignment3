@@ -2,12 +2,28 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-class VariableState{
+class VariableState implements Comparable<VariableState> {
 
-    Set<ProgramPoint.Instruction> definitionPoints = new HashSet<>();
+    String varName = null;
+
+    String funcName = null;
+
     String pointsTo = null;
     String type = null;
 
+    public VariableState() {
+    }
+
+    public VariableState(String varName, String type) {
+        this.varName = varName;
+        this.type = type;
+    }
+
+    public VariableState(String varName, String funcName, String type) {
+        this.varName = varName;
+        this.funcName = funcName;
+        this.type = type;
+    }
 
     public void setPointsTo(String pointsTo) {
         this.pointsTo = pointsTo;
@@ -17,29 +33,28 @@ class VariableState{
         return this.type;
     }
 
-    public void setDefinitionPoint(ProgramPoint.Instruction instruction) {
-        Set<ProgramPoint.Instruction> newlist = new HashSet<>();
-        newlist.add(instruction);
-        this.definitionPoints = newlist;
+    public String getVarName() {
+        return varName;
     }
 
-    public void addDefinitionPoint(ProgramPoint.Instruction instruction) {
-        this.definitionPoints.add(instruction);
+    public void setVarName(String varName) {
+        this.varName = varName;
     }
 
-    public void addAllDefinitionPoint(Set<ProgramPoint.Instruction> instructions) {
-        for (ProgramPoint.Instruction instruction : instructions) {
-            this.definitionPoints.add(instruction);
-        }
+    public String getFuncName() {
+        return funcName;
     }
 
-    // Getter for definitionPoints
-    public Set<ProgramPoint.Instruction> getDefinitionPoints() {
-        return this.definitionPoints;
+    public void setFuncName(String funcName) {
+        this.funcName = funcName;
     }
 
     public String getPointsTo() {
         return pointsTo;
+    }
+    @Override
+    public int compareTo(VariableState other) {
+        return this.toString().compareTo(other.toString());
     }
 
     @Override
@@ -47,33 +62,20 @@ class VariableState{
         VariableState newState = new VariableState();
         newState.pointsTo = this.pointsTo;
         newState.type = this.type;
-        newState.definitionPoints = new HashSet<>(this.definitionPoints);
         return newState;
     }
-
-    public VariableState copyNew(VariableState def) {
-        VariableState newState = new VariableState();
-        newState.definitionPoints = def.definitionPoints;
-        newState.pointsTo = this.pointsTo;
-        newState.type = this.type;
-        return newState;
-    }
-
 
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         VariableState other = (VariableState) obj;
-        return  Objects.equals(definitionPoints, other.definitionPoints) &&
-                Objects.equals(pointsTo, other.pointsTo) &&
+        return Objects.equals(pointsTo, other.pointsTo) &&
                 type == other.type;
     }
 
     public VariableState join(VariableState other) {
         VariableState result = this.clone();
-
-        result.addAllDefinitionPoint(other.getDefinitionPoints());
 
         return result;
     }
@@ -82,11 +84,16 @@ class VariableState{
         this.type = type;
     }
 
+
+
     @Override
     public String toString() {
-        return "definitionPoints=" + definitionPoints +
-                ", pointsTo:'" + pointsTo + '\'' +
-                ", type:'" + type + '\'';
+        if(funcName != null){
+            return funcName + "." + varName;
+        } else if(varName !=null) {
+            return varName;
+        }
+        return null;
     }
 }
 
