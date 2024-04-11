@@ -1,3 +1,0 @@
-foo.y -> {foo.x}
-main.y -> {x}
-
