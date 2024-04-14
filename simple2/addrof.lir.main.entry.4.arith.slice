@@ -1,0 +1,8 @@
+entry:
+  _t1 = $addrof x
+  p = $copy _t1
+  $store p 3
+  _t2 = $load p
+  _t3 = $arith add _t2 2
+
+

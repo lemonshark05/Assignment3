@@ -1,0 +1,6 @@
+entry:
+  _t1 = $addrof x
+  p = $copy _t1
+  $store p 3
+
+
